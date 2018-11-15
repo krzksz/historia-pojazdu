@@ -1,4 +1,4 @@
-# Project Title
+# Historia-Pojazdu
 
 A simple script that uses [Puppeteer](https://pptr.dev/) to find out what is the valid first registration date based on data returned from [HistoriaPojazdu.gov.pl](https://historiapojazdu.gov.pl/strona-glowna).
 

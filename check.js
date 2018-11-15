@@ -32,7 +32,7 @@ async function fillForm(page, plate, vin, date) {
 }
 
 module.exports = async function check(plate, vin, year) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
   let validDate = null;
 

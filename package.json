@@ -1,7 +1,7 @@
 {
   "name": "historia-pojazdu",
   "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "index.js",
   "cli": {
     "historia-pojazdu": "./index.js"
