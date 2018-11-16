@@ -1,7 +1,7 @@
 {
     "name": "historia-pojazdu",
     "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "main": "index.js",
     "bin": {
         "historia-pojazdu": "./index.js"
@@ -12,7 +12,9 @@
     },
     "license": "MIT",
     "dependencies": {
+        "cheerio": "^1.0.0-rc.2",
         "inquirer": "^6.2.0",
-        "puppeteer": "^1.10.0"
+        "request": "^2.88.0",
+        "request-promise-native": "^1.0.5"
     }
 }
