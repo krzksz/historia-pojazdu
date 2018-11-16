@@ -1,14 +1,18 @@
 {
-  "name": "historia-pojazdu",
-  "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
-  "version": "1.2.0",
-  "main": "index.js",
-  "bin": {
-    "historia-pojazdu": "./index.js"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "inquirer": "^6.2.0",
-    "puppeteer": "^1.10.0"
-  }
+    "name": "historia-pojazdu",
+    "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
+    "version": "1.2.0",
+    "main": "index.js",
+    "bin": {
+        "historia-pojazdu": "./index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/krzksz/historia-pojazdu.git"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "inquirer": "^6.2.0",
+        "puppeteer": "^1.10.0"
+    }
 }
