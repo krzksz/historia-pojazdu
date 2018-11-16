@@ -30,9 +30,6 @@ var questions = [
 ];
 
 (async function() {
-    // const { plate, vin, year } = await inquirer.prompt(questions);
-    const plate = 'OK62932';
-    const vin = 'WVWZZZ7MZXV056234';
-    const year = '1999';
+    const { plate, vin, year } = await inquirer.prompt(questions);
     await check(plate, vin, year);
 })();
