@@ -2,49 +2,54 @@ import inquirer from "inquirer";
 import check from "./check.js";
 
 (async function () {
-  let plate, vin, year;
+  let plate: string, vin: string, year: string | number;
 
   // Check for command line arguments
   if (process.argv.length >= 5) {
     plate = process.argv[2];
     vin = process.argv[3];
     year = process.argv[4];
-    console.log(`Using arguments: Plate=${plate}, VIN=${vin}, Year=${year}`);
+    console.log(`Używam argumentów: Tablica=${plate}, VIN=${vin}, Rok=${year}`);
   } else {
     var questions = [
       {
         type: "input",
         name: "plate",
-        message: "What is the vehicle's plate number?",
+        message: "Jaki jest numer rejestracyjny pojazdu?",
       },
       {
         type: "input",
         name: "vin",
-        message: "What is the vehicle's VIN number?",
+        message: "Jaki jest numer VIN pojazdu?",
       },
       {
         type: "input",
         name: "year",
-        message: "What's the first registration year?",
-        validate: (year) => {
-          if (year > 1769 && year < new Date().getFullYear() + 1) {
+        message: "Jaki jest rok pierwszej rejestracji?",
+        validate: (year: string) => {
+          const y = parseInt(year);
+          if (y > 1769 && y < new Date().getFullYear() + 1) {
             return true;
           }
-          return "Please enter a valid year.";
+          return "Proszę podać poprawny rok.";
         },
       },
     ];
 
-    const answers = await inquirer.prompt(questions);
+    const answers = await inquirer.prompt<{ plate: string; vin: string; year: string }>(questions);
     plate = answers.plate;
     vin = answers.vin;
     year = answers.year;
   }
 
   try {
-    await check(plate, vin, year);
+    await check(plate, vin, year.toString());
   } catch (err) {
-    console.error("Fatal error:", err.message);
+    if (err instanceof Error) {
+      console.error("Błąd krytyczny:", err.message);
+    } else {
+      console.error("Błąd krytyczny:", err);
+    }
     process.exit(1);
   }
 })();

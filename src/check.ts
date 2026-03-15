@@ -2,23 +2,28 @@ import axios from "axios";
 import { CookieJar } from "tough-cookie";
 import https from "https";
 
-const daysInMonth = (month, year) => new Date(year, month, 0).getDate();
-const zeroPad = (number) => ("0" + number).slice(-2);
+const daysInMonth = (month: number, year: number): number => new Date(year, month, 0).getDate();
+const zeroPad = (number: number | string): string => ("0" + number).slice(-2);
+const formatDisplayDate = (isoDate: string): string => {
+  const [year, month, day] = isoDate.split("-");
+  return `${day}.${month}.${year}`;
+};
 
-const generateDates = (year) => {
-  const dates = [];
+const generateDates = (year: number | string): string[] => {
+  const dates: string[] = [];
+  const y = typeof year === "string" ? parseInt(year) : year;
   for (let month = 1; month <= 12; month++) {
-    for (let day = 1; day <= daysInMonth(month, year); day++) {
-      dates.push(`${year}-${zeroPad(month)}-${zeroPad(day)}`);
+    for (let day = 1; day <= daysInMonth(month, y); day++) {
+      dates.push(`${y}-${zeroPad(month)}-${zeroPad(day)}`);
     }
   }
   return dates;
 };
 
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
 
-export default async function check(plate, vin, year) {
-  console.log(`Searching for ${year} (per-request session, 1s sleep)...`);
+export default async function check(plate: string, vin: string, year: string | number): Promise<void> {
+  console.log(`Szukanie dla roku ${year} (sesja na żądanie, 1s odstępu)...`);
 
   const sslAgent = new https.Agent({
     ciphers: "DEFAULT@SECLEVEL=1",
@@ -57,14 +62,14 @@ export default async function check(plate, vin, year) {
 
   for (const date of dates) {
     process.stdout.write(
-      `\r[${date}] Checking...                                `,
+      `\r[${formatDisplayDate(date)}] Sprawdzanie...                                `,
     );
 
     const jar = new CookieJar();
     const timestamp = Date.now();
     const nf_wid = `HistoriaPojazdu:${timestamp}`;
 
-    const request = async (url, options = {}) => {
+    const request = async (url: string, options: { method?: string; data?: any; headers?: any } = {}) => {
       const { method = "GET", data = null, headers = {} } = options;
       const cookies = await jar.getCookieString(url);
       const mergedHeaders = { ...headers, Cookie: cookies };
@@ -114,14 +119,14 @@ export default async function check(plate, vin, year) {
       });
 
       if (initRes.status !== 200) {
-        process.stdout.write(`\n[! Handshake failed: ${initRes.status}]\n`);
+        process.stdout.write(`\n[! Błąd połączenia: ${initRes.status}]\n`);
         await delay(2000);
         continue;
       }
 
       const cookies = await jar.getCookies("https://moj.gov.pl");
       const xsrf = cookies.find((c) => c.key.toLowerCase() === "xsrf-token");
-      if (!xsrf) throw new Error("No XSRF cookie");
+      if (!xsrf) throw new Error("Brak ciasteczka XSRF");
 
       // Vehicle Search
       const resp = await client.post(
@@ -150,12 +155,12 @@ export default async function check(plate, vin, year) {
           (data.technicalData || data.vehicle || data.registrationNumber)
         ) {
           process.stdout.write("\n");
-          console.log(`\x1b[32m>>> MATCH FOUND: ${date} <<<\x1b[0m`);
+          console.log(`\x1b[32m>>> ZNALEZIONO DOPASOWANIE: ${formatDisplayDate(date)} <<<\x1b[0m`);
 
           const tech = data.technicalData?.basicData || data.vehicle;
           if (tech) {
             console.log(
-              `Vehicle: ${tech.make || tech.brand} ${tech.model || ""}`,
+              `Pojazd: ${tech.make || tech.brand} ${tech.model || ""}`,
             );
           }
           return;
@@ -163,11 +168,11 @@ export default async function check(plate, vin, year) {
       } else if (resp.status === 404) {
         // Date rejected, keep going
       } else if (resp.status === 429) {
-        process.stdout.write("\nRate limited. Waiting 30s...\n");
+        process.stdout.write("\nZbyt wiele zapytań. Czekam 30s...\n");
         await delay(30000);
       } else if (resp.status === 406) {
         process.stdout.write(
-          `\n[! 406 error at ${date} - handshake refused]\n`,
+          `\n[! Błąd 406 przy ${formatDisplayDate(date)} - odrzucono połączenie]\n`,
         );
         await delay(2000);
       }
@@ -177,5 +182,5 @@ export default async function check(plate, vin, year) {
 
     await delay(500); // 0.5s delay
   }
-  process.stdout.write("\nNo match found.\n");
+  process.stdout.write("\nNie znaleziono dopasowania.\n");
 };
