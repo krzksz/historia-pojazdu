@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
-import check from "./check.js";
+
+import { check } from "./check";
 
 (async function () {
   let plate: string, vin: string, year: string | number;
@@ -36,7 +37,11 @@ import check from "./check.js";
       },
     ];
 
-    const answers = await inquirer.prompt<{ plate: string; vin: string; year: string }>(questions);
+    const answers = await inquirer.prompt<{
+      plate: string;
+      vin: string;
+      year: string;
+    }>(questions);
     plate = answers.plate;
     vin = answers.vin;
     year = answers.year;
