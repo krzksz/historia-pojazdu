@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build all platforms
+        run: bun run build:all
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/historia-pojazdu-linux-x64
+            dist/historia-pojazdu-linux-arm64
+            dist/historia-pojazdu-windows-x64.exe
+            dist/historia-pojazdu-windows-arm64.exe
+            dist/historia-pojazdu-macos-x64
+            dist/historia-pojazdu-macos-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

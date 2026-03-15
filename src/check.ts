@@ -1,6 +1,6 @@
-const axios = require("axios");
-const { CookieJar } = require("tough-cookie");
-const https = require("https");
+import axios from "axios";
+import { CookieJar } from "tough-cookie";
+import https from "https";
 
 const daysInMonth = (month, year) => new Date(year, month, 0).getDate();
 const zeroPad = (number) => ("0" + number).slice(-2);
@@ -17,7 +17,7 @@ const generateDates = (year) => {
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-module.exports = async function check(plate, vin, year) {
+export default async function check(plate, vin, year) {
   console.log(`Searching for ${year} (per-request session, 1s sleep)...`);
 
   const sslAgent = new https.Agent({
