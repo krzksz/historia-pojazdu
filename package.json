@@ -1,20 +1,30 @@
 {
-    "name": "historia-pojazdu",
-    "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
-    "version": "1.3.1",
-    "main": "index.js",
-    "bin": {
-        "historia-pojazdu": "./index.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/krzksz/historia-pojazdu.git"
-    },
-    "license": "MIT",
-    "dependencies": {
-        "cheerio": "^1.0.0-rc.2",
-        "inquirer": "^6.2.0",
-        "request": "^2.88.0",
-        "request-promise-native": "^1.0.5"
-    }
+  "name": "historia-pojazdu",
+  "description": "A small script for fetching Polish vehicle information without knowing exact first registration date.",
+  "version": "2.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun src/index.ts",
+    "build": "bun build ./src/index.ts --compile --outfile dist/historia-pojazdu",
+    "build:linux-x64": "bun build ./src/index.ts --compile --target=bun-linux-x64 --outfile dist/historia-pojazdu-linux-x64",
+    "build:linux-arm64": "bun build ./src/index.ts --compile --target=bun-linux-arm64 --outfile dist/historia-pojazdu-linux-arm64",
+    "build:windows-x64": "bun build ./src/index.ts --compile --target=bun-windows-x64 --outfile dist/historia-pojazdu-windows-x64.exe",
+    "build:windows-arm64": "bun build ./src/index.ts --compile --target=bun-windows-arm64 --outfile dist/historia-pojazdu-windows-arm64.exe",
+    "build:macos-x64": "bun build ./src/index.ts --compile --target=bun-darwin-x64 --outfile dist/historia-pojazdu-macos-x64",
+    "build:macos-arm64": "bun build ./src/index.ts --compile --target=bun-darwin-arm64 --outfile dist/historia-pojazdu-macos-arm64",
+    "build:all": "bun run build:linux-x64 && bun run build:linux-arm64 && bun run build:windows-x64 && bun run build:windows-arm64 && bun run build:macos-x64 && bun run build:macos-arm64"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/krzksz/historia-pojazdu.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.9",
+    "bun-types": "^1.3.10"
+  }
 }
