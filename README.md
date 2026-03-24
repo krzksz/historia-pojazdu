@@ -10,12 +10,41 @@ Podczas szukania samochodu na portalach aukcyjnych częstą praktyką sprzedawc�
 
 Najprostszym sposobem na skorzystanie ze skryptu jest pobranie gotowego pliku wykonywalnego (executable) dla Twojego systemu operacyjnego ze strony **[GitHub Releases](https://github.com/krzksz/historia-pojazdu/releases)**.
 
-1. Pobierz plik odpowiedni dla Twojego systemu (Windows, Linux lub macOS).
-2. (Linux/macOS) Nadaj uprawnienia do wykonywania: `chmod +x historia-pojazdu-*`.
-3. Uruchom go w terminalu!
+### 1. Pobierz plik
+Pobierz wersję odpowiednią dla Twojego systemu z sekcji **[Releases](https://github.com/krzksz/historia-pojazdu/releases)**.
 
-Korzystanie z tych plików nie wymaga instalacji Node.js ani Bun.
+### 2. Przygotowanie pliku (tylko macOS i Linux)
+Otwórz Terminal w folderze, do którego pobrałeś plik, i wykonaj poniższe komendy:
 
+* **macOS (zdjęcie blokady Apple i uprawnienia):**
+    ```bash
+    # Usuwa komunikat o "uszkodzonym pliku" (Gatekeeper)
+    xattr -d com.apple.quarantine historia-pojazdu-macos-*
+    
+    # Nadaje uprawnienia do wykonywania
+    chmod +x historia-pojazdu-macos-*
+    ```
+
+* **Linux (nadanie uprawnień):**
+    ```bash
+    chmod +x historia-pojazdu-linux-*
+    ```
+
+### 3. Uruchomienie programu
+
+Aby program zadziałał poprawnie, musisz go wywołać z poziomu konsoli:
+
+* **Windows:**
+    Otwórz **PowerShell** lub **Wiersz Polecenia**, przeciągnij plik `.exe` do okna konsoli i naciśnij `Enter`.
+    ```powershell
+    .\historia-pojazdu-windows-amd64.exe
+    ```
+
+* **macOS / Linux:**
+    Wpisz w terminalu ścieżkę do pliku, zaczynając od `./`:
+    ```bash
+    ./historia-pojazdu-macos-arm64
+    ```
 ---
 
 ### Alternatywa: Uruchomienie z Bun (Dla programistów)
